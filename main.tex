@@ -42,6 +42,9 @@
 
 \addto\captionsenglish{\renewcommand{\figurename}{Figura}}
 \renewcommand{\lstlistingname}{Código}
+\renewcommand{\t}{Código}
+\usepackage{caption}
+\captionsetup[table]{name=Tabela}
 
 \title{Estatísticas para um Melhor Desempenho no League of Legends}
 \author{Iverson Pereira e Ricardo Luna}
@@ -55,7 +58,7 @@ Your abstract.
 
 \section{Introdução}
 
-\textit{League of Legends} ou popularmente conhecimento como LoL é um jogo disponível online estilo MOBA (\textit{Multiplayer Online Bale Arena}) e também possui fortes elementos de RPG (\textit{Role-Playing Game}). Dentre outras características o jogo tem apresentado dados bastantes significativos nos últimos anos. Em 2017, o cenário competitivo teve um faturamento de U\$12,016,606.24 como um total de 135 campeonatos nesse período o que representa um dos maiores faturamentos em jogos desse estilo.  
+\textit{League of Legends} (popularmente conhecido como LoL) é um jogo disponível online estilo MOBA (\textit{Multiplayer Online Bale Arena}) e também possui fortes elementos de RPG (\textit{Role-Playing Game}). Dentre outras características o jogo tem apresentado dados bastantes significativos nos últimos anos. Em 2017, o cenário competitivo teve um faturamento de U\$12,016,606.24 como um total de 135 campeonatos nesse período o que representa um dos maiores faturamentos em jogos desse estilo.  
 
 O jogo teve sua inspiração em outro jogo chamado Dota (\textit{Defense of the Ancients}). Dota tem como objetivo a destruição de uma estrutura principal para condição de vitória da partida. Essa estrutura de jogo também é comum ao LoL com adição de outros elementos próprios: rota de selva, dragões elementais e outros recursos que fornecem maiores vantagens para equipe.  
 
@@ -101,14 +104,17 @@ library(stringr) #Operacoes com string
 \end{lstlisting}
 
 \section{Preparação dos Dados}
+Esta seção apresenta os dados na sua forma original e descreve as etapas executadas para realizar a limpeza dessa massa de dados, a fim de possibilitar a extração de estatísticas posteriormente. A Seção~\ref{sec:fontedados} explica como os dados foram obtidos. Na Seção~\ref{sec:entendendo} os dados são expostos e explicados. Finalmente, na Seção~\ref{sec:limpeza} é mostrado como é realizada a limpeza e formação dos dados a partir do conjunto de dados original.
 
 \subsection{Fontes dos dados}
+\label{sec:fontedados}
 Para a obtenção da base de dados utilizamos um projeto do GitHub chamado LOL.tools\footnote{em https://github.com/MarcusDEFGH/LOL.tools}. Este projeto utiliza o Scrapy\footnote{https://scrapy.org/}, biblioteca em Python, que coleta os dados de uma página web e gera um arquivo .\texttt{csv} com os dados capturados. O site de onde os dados são extraídos é o OP.GG. Como já mencionado esse site disponibiliza um histórico de todas as partidas do jogo e tal dado é divido por regiões, onde cada região representa os servidores implantados.
 
 \subsection{Entendendo os Dados}
-Os dados coletados são relacionados as ligas do disponíveis no jogo (bronze, prata, ouro, platina, diamante, mestre e desafiante), cada liga representa um nível de habilidade do jogador. Para ser classificado a um liga, o jogador deve jogar 10 partidas e a partir do seu desempenho o jogador será classificado. Todos as ligas começam no nível 5 e vão no máximo até o 1. Para subir entre os níveis, de uma mesma liga, o jogador deve jogar 3 partidas, quando atingir o limite de 100 Pontos de Liga (PdL), se obtiver duas vitórias o jogador é promovido. Para conseguir subir de liga o jogador deve chegar no nível 1 da liga e obter 100 PdL e caso consiga vencer 3 das 5 partidas que devem ser disputadas o jogador é promovido. Quando se chega no ouro o jogador ganha um conjunto de itens dentro do jogo a cada sessão, geralmente no início do ano, e ao se chegar no desafiante o jogo envia presentes para os jogadores de cada região. Geralmente nas equipes competitivas os jogadores escolhidos são do nível desafiante e a premiação é maior nos campeonatos. 
+\label{sec:entendendo}
+Os dados coletados são relacionados as ligas do disponíveis no jogo (bronze, prata, ouro, platina, diamante, mestre e desafiante), cada liga representa um nível de habilidade do jogador. Para ser classificado em uma liga, o jogador deve jogar 10 partidas e a partir do seu desempenho o jogador será classificado. Todos as ligas começam no nível 5 e vão no máximo até o 1. Para subir entre os níveis, de uma mesma liga, o jogador deve jogar 3 partidas, quando atingir o limite de 100 Pontos de Liga (PdL), se obtiver duas vitórias o jogador é promovido. Para conseguir subir de liga o jogador deve chegar no nível 1 da liga e obter 100 PdL e caso consiga vencer 3 das 5 partidas que devem ser disputadas o jogador é promovido. Quando se chega no ouro o jogador ganha um conjunto de itens dentro do jogo a cada sessão, geralmente no início do ano, e ao se chegar no desafiante o jogo envia presentes para os jogadores de cada região. Geralmente nas equipes competitivas os jogadores escolhidos são do nível desafiante e a premiação é maior nos campeonatos. 
 
-Os dados assim que coletados apresentam um total de 14 colunas, ilustrado na Figura~\ref{fig:dataantes}. As 10 primeiras colunas representam os integrantes (personagens) dos times. Os personagens do primeiro time são representados pelos valores das colunas $team_1.x$, onde x varia de 0 até 4.  Os personagens do time 2 são representados pelas colunas $team_2.x$, análogo ao time 1. Para cada um desses times temos um total de 143 possíveis personagens disponíveis para a escolha do jogador, mas como o modo de jogo é dividido por ranking desse total 10 personagens são banidos antes do início da partida. Esse banimento é usado para remover personagens que se mostraram fortes no \textit{patch} atual ou caso um jogador possa ter um nível muito alto de habilidade com o mesmo.
+Os dados correspondem a partidas realizadas no período de 31 de Maio à 18 de Junho de 2018. Estes dados, retirados a partir da fonte mencionada na seção anterior, são compostos por um total de 14 colunas; as linhas representam as partidas, na Figura~\ref{fig:dataantes} está ilustrado parte dessa massa de dados. As 10 primeiras colunas representam os integrantes (personagens) dos times. Os personagens do primeiro time são representados pelos valores das colunas $team_1.x$, onde \textit{x} varia de 0 até 4.  Os personagens do time 2 são representados pelas colunas $team_2.x$, análogo ao time 1. Para cada um desses times temos um total de 143 possíveis personagens disponíveis para a escolha do jogador que estão disponíveis em um outro conjunto de dados, mostrado na Figura~\ref{fig:champantes}. Os 143 personagens (ou Campeões, como são chamados no jogo) são representados por colunas, onde cada coluna é um personagem, ou seja, de \texttt{V1} até \texttt{V143}. Outro ponto do jogo é que as partidas são divididas por \textit{ranking}, onde 10 personagens desse total são banidos antes do início da escolha do time. Esse banimento é usado para remover personagens que se mostraram fortes no \textit{patch} atual ou caso um jogador possa ter um nível muito alto de habilidade com o mesmo. A coluna \texttt{timestamp}, ainda da Figura~\ref{fig:dataantes}, representa a data e horário do término da partida e não foi utilizada na análise dos dados. A coluna \texttt{server} indica a região onde a partida foi realizada (BR, EUNE, EUW, JP, LAN, LAS, NA, OCE, RU, TR). A coluna \texttt{result} indica o resultado do jogo: o valor \texttt{Victory} denota a vitória para o time 1; se for \texttt{Defeat} o time 2 saiu vitorioso. Por fim, a coluna \texttt{mmr} indica o ranking da partida armazenada (\textit{MatchMaking Rate} - MMR).
 
 \begin{figure}[ht]
 \centering
@@ -116,26 +122,47 @@ Os dados assim que coletados apresentam um total de 14 colunas, ilustrado na Fig
 \caption{\label{fig:dataantes}Conjunto de dados coletados}
 \end{figure}
 
-A coluna \textit{timestamp} representa a data e horário do término da partida e não fui utilizado na análise dos dados. A coluna \textit{server} indica a região onde a partida foi realizada (BR, EUNE, EUW, JP, LAN, LAS, NA, OCE, RU, TR). A coluna \textit{result} indica o resultado do jogo mas apenas com relação ao primeiro time, no caso o valor deve ser invertido para o time 2. Por fim, a coluna mmr indica o ranking da partida armazenada (\textit{MatchMaking Rate} - MMR). 
+\begin{figure}[ht]
+\centering
+\includegraphics{imagens/champ_data}
+\caption{\label{fig:champantes}Conjunto de dados dos personagens}
+\end{figure}
+
+A leitura dos dados ocorreu conforme o Código~\ref{cod:readinicio}. A variável \texttt{matches} corresponde ao conjunto de dados obtidos a partir da leitura do arquivo \texttt{patch811.csv} com a função \texttt{read.csv}. Para a leitura da lista de personagens foi executado a função \texttt{read.table}, pois os dados estavam dispostos no arquivo \texttt{champions.txt} separados por vírgula e em seguida foram armazenados na variável \texttt{champions}.
+
+\begin{lstlisting}[language=R, caption={Leitura da 
+base de dados original},label={cod:readinicio}]
+# arquivo com os dados das partidas e carregado
+matches <- read.csv('patch811.csv', stringsAsFactors = F)
+# arquivo com a lista de personagens e carregado
+champions <- read.table("champions.txt", sep=",")
+\end{lstlisting}
 
 \subsection{Formatação e Limpeza}
+\label{sec:limpeza}
 
-Após o carregamento dos dados, percebemos que seria importante a junção dos personagens de cada time em uma única coluna. Isto é, para o time 1, haveria uma coluna com os cinco personagens escolhidos, por sua vez, o time 2 também teria essa mesma representação em uma outra coluna. Diante disso, inicialmente concatenamos as variáveis que apresentam o nome dos personagens de cada time. Para tal etapa foi utilizada a função \texttt{unite} com o separador “\_”, como ilustrado no Código~\ref{cod:readdata}. Essa etapa foi realizada visando a simplificação das operações que podem ser realizadas usando as operações entre \textit{strings} contidas no R. O segundo tratamento efetuado é a mudança do valor na variável \texttt{result}, que poderia ser \texttt{Victory} ou \texttt{Defeat}, para um valor booleano como \textit{True} ou \textit{False}. Essa operação simplifica qualquer outra operação futura pois esse valor poder ser facilmente convertido para inteiro e assim efetuar operações de soma ou média que serão utilizadas no projeto. Durante a leitura dos dados foi utilizada a função \texttt{read.csv} com todos os parâmetros padrões do R e o adiciona de \textit{stringsAsFactors} como falso. A Figura \ref{fig:data_clean} mostra o resultado obtidos após a limpeza dos dados, as colunas exibidas são: $team_1$, $team_2$, $server$, $result$ e $mmr$.
+Após o carregamento dos dados, percebemos que seria importante a junção dos personagens de cada time em uma única coluna. Isto é, para o time 1, haveria uma coluna com os cinco personagens escolhidos, por sua vez, o time 2 também teria essa mesma representação em uma outra coluna. Se mantivéssemos o formato original, a análise seria mais complexa o que causaria dificuldades na elaboração de estatísticas.  
+
+Sendo assim, concatenamos as variáveis que apresentam o nome dos personagens de cada time. Para tal etapa foi utilizada a função \texttt{unite} com o separador “\_”, como ilustrado no Código~\ref{cod:readdata}. Essa etapa foi realizada visando a simplificação das operações que podem ser realizadas usando as operações entre \textit{strings} contidas no R, assim criamos as colunas \texttt{team1} e \texttt{team2} (linhas 1-5 e 7-11, respectivamente). O segundo tratamento efetuado é a mudança do valor na variável \texttt{result}, que poderia ser \texttt{Victory} ou \texttt{Defeat}, para um valor booleano como \textit{True} ou \textit{False} (linhas 14 a 17). Essa operação simplifica qualquer outra operação futura pois esse valor poder ser facilmente convertido para inteiro e assim efetuar operações de soma ou média que serão utilizadas no projeto. Durante a leitura dos dados foi utilizada a função \texttt{read.csv} com todos os parâmetros padrões do R e o adiciona de \texttt{stringsAsFactors} como falso, visto no Código~\ref{cod:readinicio}. A Figura \ref{fig:data_clean} mostra o resultado obtido após a limpeza dos dados, as colunas exibidas são: \texttt{team1}, \texttt{team2}, \texttt{server}, \texttt{result} e \texttt{mmr}.
 
 \begin{lstlisting}[language=R, caption={Leitura da base de dados},label={cod:readdata}]
-dados<-read.csv('patch811.csv', stringsAsFactors = F)
-
 # Concatena os valores das variaveis team1.x
-dados<-dados %>%
-  unite(col = "team_1",
-        1,2,3,4,5,
-        sep = "_")
+matches <- matches %>%
+    unite(col = "team1",
+          1,2,3,4,5,
+          sep = "_")
         
 # Concatena os valores das variaveis team2.x
-dados<-dados %>%
-  unite(col = "team_2",
-        2,3,4,5,6,
-        sep = "_")
+matches <- matches %>%
+    unite(col = "team2",
+          2,3,4,5,6,
+          sep = "_")
+          
+# Substitui as strings por booleanos        
+matches$result[matches$result=='Victory'] <- T
+matches$result[matches$result=='Defeat'] <- F
+# Converte para tipo 'logical'
+matches$result <- as.logical(matches$result)
 \end{lstlisting}
 
 
@@ -145,7 +172,14 @@ dados<-dados %>%
 \caption{\label{fig:data_clean}Dados após a limpeza}
 \end{figure}
 
-A Figura \ref{fig:names} mostra o nomes de todos os personagens do jogo até o \textit{patch} $8.14$ e sendo assim todos os nomes possíveis para a composição de ambos os times. 
+O outro conjunto de dados com a lista de personagens também precisa ser organizado em um formato mais amigável. O Código~\ref{cod:champlimpo} mostra a operação que foi realizada na variável \texttt{champions}. Aplicamos a função \texttt{gather} para transformar as colunas em linhas, para que assim tivéssemos apenas uma variável contendo a lista de personagens. Em seguida pegamos apenas os valores, transformando \texttt{champions} em uma lista com 143 elementos, como mostrado na Figura \ref{fig:names}. Portanto, obtemos todos os nomes possíveis para a composição de ambos os times. 
+
+\begin{lstlisting}[language=R, caption={Organizando dados com os nomes dos personagens},label={cod:champlimpo}]
+# Transforma as colunas em linhas
+champions <- gather(champions, "champ")
+# Obtem os valores da coluna e transforma em lista
+champions <- champions$value
+\end{lstlisting}
 
 
 \begin{figure}
@@ -154,6 +188,8 @@ A Figura \ref{fig:names} mostra o nomes de todos os personagens do jogo até o \
 \caption{\label{fig:names}Nome dos personagens do jogo}
 \end{figure}
 
+Com os dados organizados e limpos, agora é possível analisar o conjunto de dados para propor melhores estatísticas com a finalidade de auxiliar no processo de escolha personagens em uma partida de LoL.
+
 \section{Análise Exploratória}
 
 
@@ -161,24 +197,100 @@ Dado o conjunto de dados é possível extrair informações que antes não estav
 
 A taxa de vitória de um personagem pode ser algo associado ao \textit{patch} atual ou a popularidade dele, normalmente quando são feitos pequenos ajustes no jogo ou balanceamentos alguns dos personagens podem ganhar um pico de poder se comparado a sua versão antiga. Ou fator que pode influenciar nessa medida é o nível de dificuldade atrelado ao aprendizado com o uso de um certo personagem, certos personagens oferecem mecânicas mais simples e outros mais complexas. Quando um jogador mais experiente, geralmente nos ligas mais altas do jogo, ele possui certa facilidade com as mecânicas do jogo e esse fator quando aplicado em um personagem que está em seu pico de poder a taxa de vitória aumenta consideravelmente. 
 
-No jogo a equipe SKT T1 da Coreia do Sul já foi considerada a melhor do mundo, nessa região o nível dos jogadores do competitivo é realmente alto se comparado com outras regiões. O jogador Faker (Lee Sang-hyeok), que joga no meio, já foi considerado por muitos anos o melhor jogador em sua posição. Esse jogador tem um alto nível e quando em uma de suas partidas, seja em competições ou em partidas solo, e quando mostra um bom desempenho com algum personagem do jogo outros jogadores do mundo tentam “copiar” seu estilo de jogo, que se mostrou extremamente eficaz, e assim surgem os METAS.
+No jogo a equipe SKT T1 da Coreia do Sul já foi considerada a melhor do mundo, nessa região o nível dos jogadores do competitivo é realmente alto se comparado com outras regiões. O jogador Faker (Lee Sang-hyeok), que joga na rota do meio, já foi considerado por muitos anos o melhor jogador em sua posição. Esse jogador tem um alto nível e quando em uma de suas partidas, seja em competições ou em partidas solo, e quando mostra um bom desempenho com algum personagem do jogo outros jogadores do mundo tentam “copiar” seu estilo de jogo, que se mostrou extremamente eficaz, e assim surgem os METAS.
 
 
-Já que os dados apresentam um conjunto de combinações de times e o resultado da partida é possível aplicar algoritmos como KNN (\textit{K nearest neighboors}) \cite{fukunaga1975branch}. Sua ideia principal é que possível estimar uma classe de um novo dado baseado no conjunto de vizinhos obtidos a partir de uma análise na base de dados. Para se estimar qual o nível de similaridade com um determinando elemento é utilizada uma função. Como os dados da base são apenas nomes dos personagens o calculo é realizado utilizando quantos \textit{matchs} foram obtidos entre um time e toda a base dados. O resultado da partida, que pode ser vitória ou derrota, será obtido como a classe que foi associada a maioria dos vizinhos desse objeto avaliado. 
+Já que os dados apresentam um conjunto de combinações de times e o resultado da partida é possível aplicar algoritmos como KNN (\textit{K nearest neighboors}) \cite{fukunaga1975branch}. Sua ideia principal é a possibilidade de estimar uma classe de um novo dado baseado no conjunto de vizinhos obtidos a partir de uma análise na base de dados. Para se estimar qual o nível de similaridade com um determinando elemento é utilizada uma função. Como os dados da base são apenas nomes dos personagens o calculo é realizado utilizando quantos \textit{matchs} foram obtidos entre um time e toda a base dados. O resultado da partida, que pode ser vitória ou derrota, será obtido como a classe que foi associada a maioria dos vizinhos desse objeto avaliado. 
 
 
-A Figura \ref{fig:win_rate} mostrar as melhores taxa de vitórias e pior taxa de vitórias, usando o comando head() e tail() respectivamente, as barras indicam a taxa de vitória e a legenda mostra qual os seus valores utilizando as cores como referência. Com os dados apresentando nessa figura é possível observar que os personagens Quin, Pantheon, Poppy, Cassiopeia e Kog’Maw obtêm os melhores rates, de forma global. Enquanto, Jinx, Amumu, Volibear, Tristana, Xerath e Elise apresentam os piores resultados. 
+A Figura~\ref{fig:win_rate} mostra dois gráficos: a direita com as melhores taxas de vitórias; a esquerda com as piores taxas de vitórias. Os valores do gráficos foram gerados usando o comando \texttt{head} para os melhores e \texttt{tail} para os piores. As barras indicam a taxa de vitória e a legenda mostra quais os seus valores utilizando as cores como referência. Com os dados apresentados nessa figura é possível observar que os personagens Quinn, Pantheon, Poppy, Cassiopeia e Kog’Maw obtiveram os melhores \textit{rates}, de forma global, todos acima de 50\%. Enquanto, Jinx, Amumu, Volibear, Tristana, Xerath e Elise apresentam os piores resultados, estes abaixo de 50\%. 
 
-\begin{figure}
+\begin{figure}[ht]
 \centering
-\includegraphics[width=0.7\columnwidth]{imagens/Rplot}
-\caption{\label{fig:win_rate}Taxa de vitórias global.}
+\includegraphics[width=1\columnwidth]{imagens/Rplot}
+\caption{\label{fig:win_rate}Taxa de vitórias global}
 \end{figure}
 
-Os dados mostram que se um jogador for iniciar uma partida ou tentar melhorar com um novo personagem seria interessante observar jogos de um jogador mais experiente, facilmente encontrados no \textit{Youtube} ou \textit{Twitch tv}, e depois que entender a mecânica desse personagem inicia seus treinos. Usando uma estratégia assim o jogador pode atingir maiores taxa de vitória e usar o \textit{META} e as estatística a seu favor.
+Os dados mostram que se um jogador for iniciar uma partida ou tentar melhorar com um novo personagem seria interessante observar jogos de um jogador mais experiente, facilmente encontrados em plataformas de \textit{streamming} como Youtube\footnote{https://www.youtube.com/} ou Twitch.tv\footnote{https://www.twitch.tv/}, e depois que entender a mecânica desse personagem inicia seus treinos. Usando uma estratégia assim o jogador pode atingir maiores taxa de vitória e usar o META e as estatística a seu favor.
+
+\subsection{Personagens Mais Populares}
+%Continuo de manha...
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\columnwidth]{imagens/less_most_popular}
+\caption{\label{fig:popular}Personagens mais e menos populares}
+\end{figure}
+
+\begin{lstlisting}[language=R, caption={Organizando dados com os nomes dos personagens},label={cod:mostpop}]
+# champiom's win rate by region
+rate_by_region <- c()
+regions <- unique(dados$server)
+tamanho = length(champ_names)
+for (x in 1:tamanho){
+  champ_pos_team1 <- which(grepl(champ_names[x],dados$team_1))
+  champ_pos_team2 <- which(grepl(champ_names[x],dados$team_2))
+  champ_data_team1 <- dados[champ_pos_team1, ]
+  champ_data_team2 <- dados[champ_pos_team2, ]
+  champ_data_team2$result <- !champ_data_team2$result
+  
+  champ_data <- rbind(champ_data_team1, champ_data_team2)
+  
+  champ_popularity <- c()
+  for(y in 1:length(regions)){
+    champ_popularity[y] <- sum(champ_data$server == regions[y])
+  }
+  print(champ_names[x])
+  champ_popularity <- data.frame(server = regions, value = champ_popularity)
+  print(champ_popularity) <- champ_data %>%
+                    group_by(server) %>%
+                    summarise(
+                      rate = mean(result)
+                    )
+  
+  champ_popularity <- length(champ_data$server)
+  
+  rate_by_region <- rbind(rate_by_region, data.frame(champ=champ_names[x], champ_rate_by_region, popularity = champ_popularity))
+}
+
+# most popular champions in the world
+most_popular <- rate_by_region %>%
+  group_by(champ) %>%
+  summarise(count = max(popularity)) %>%
+  arrange(desc(count))
+  
+barplot(head(most_popular$count), 
+        names.arg=head(most_popular$champ), 
+        main="Most popular champions - Global",
+        xlab="Champion",
+        ylab="Matches",
+        col=colors)
+
+barplot(tail(most_popular$count), 
+        names.arg=tail(most_popular$champ), 
+        main="Less popular champions - Global",
+        xlab="Champion",
+        ylab="Matches",
+        col=colors)
+\end{lstlisting}
+
+\begin{table}[ht]
+\centering
+\caption{Exemplo de dado gerado com popularidade}
+\begin{tabular}{|l|l|l|}
+\hline
+\multicolumn{3}{|c|}{Aatrox} \\ \hline
+ & server & popularity \\ \hline
+1 & br & 59 \\ \hline
+2 & na & 84 \\ \hline
+3 & euw & 80 \\ \hline
+4 & lan & 72 \\ \hline
+5 & jp & 64 \\ \hline
+6 & tr & 23 \\ \hline
+\end{tabular}
+\end{table}
 
 \section{Conclusões}
-
+%faço de manhã
 
 
 \bibliographystyle{alpha}
