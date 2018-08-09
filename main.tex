@@ -3,6 +3,7 @@
 %% Language and font encodings
 \usepackage[brazil,english]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage{indentfirst}
 %% Sets page size and margins
 \usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
 
@@ -53,14 +54,14 @@
 \maketitle
 
 \begin{abstract}
-Your abstract.
+Jogos Online etão cada vez mais populares nas últimas décadas. Um desses jogos é \textit{League of Legends}. Este jogo possui milhões de jogadores diários o que gera uma massa de dados enorme a cada segundo. Diante disso, este projeto visa propor estatísticas para auxiliar jogadores durante suas partidas no jogo. Utilizamos funções da linguagem R com auxilio de outros pacotes para trabalhar em cima de uma base de dados com mais de 12 mil partidas. Apresentamos gráficos para ajudar o jogador a definir possíveis personagens levando em consideração os desafios da versão atual do jogo. Além disso, prevemos resultados de partidas utilizando o algoritmo kNN.
 \end{abstract}
 
 \section{Introdução}
 
-\textit{League of Legends} (popularmente conhecido como LoL) é um jogo disponível online estilo MOBA (\textit{Multiplayer Online Bale Arena}) e também possui fortes elementos de RPG (\textit{Role-Playing Game}). Dentre outras características o jogo tem apresentado dados bastantes significativos nos últimos anos. Em 2017, o cenário competitivo teve um faturamento de U\$12,016,606.24 como um total de 135 campeonatos nesse período o que representa um dos maiores faturamentos em jogos desse estilo.  
+\textit{League of Legends}\footnote{https://br.leagueoflegends.com/} (popularmente conhecido como LoL) é um jogo disponível online estilo MOBA (\textit{Multiplayer Online Bale Arena}) e também possui fortes elementos de RPG (\textit{Role-Playing Game}). Dentre outras características o jogo tem apresentado dados bastantes significativos nos últimos anos. Em 2017, o cenário competitivo teve um faturamento de U\$12,016,606.24 como um total de 135 campeonatos nesse período o que representa um dos maiores faturamentos em jogos desse estilo.  
 
-O jogo teve sua inspiração em outro jogo chamado Dota (\textit{Defense of the Ancients}). Dota tem como objetivo a destruição de uma estrutura principal para condição de vitória da partida. Essa estrutura de jogo também é comum ao LoL com adição de outros elementos próprios: rota de selva, dragões elementais e outros recursos que fornecem maiores vantagens para equipe.  
+O jogo teve sua inspiração em outro jogo chamado Dota\footnote{http://br.dota2.com/} (\textit{Defense of the Ancients}). Dota tem como objetivo a destruição de uma estrutura principal para condição de vitória da partida. Essa estrutura de jogo também é comum ao LoL com adição de outros elementos próprios: rota de selva, dragões elementais e outros recursos que fornecem maiores vantagens para equipe.  
 
 O jogo tem apresentado aspectos bastantes interessantes mais recentemente, a cada nova sessão, atualização grande que traz mudanças maiores ao jogo, ou a cada novo \textit{patch} que são atualizações menores visando o balanceamento e resolver problemas no jogo. Isso possibilita que jogadores mais experientes descubram ou proponham novas formas de jogo e composições objetivando um melhor desempenho e consequentemente aumentando suas chances de vitória. 
 
@@ -70,7 +71,7 @@ Assim como mostrado na Figura~\ref{fig:map}, o jogo possui quatro rotas: \textit
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.7\textwidth]{imagens/rotas}
-\caption{\label{fig:map}Mapa do Summoner's Rift.}
+\caption{\label{fig:map}Mapa do Summoner's Rift. \cite{leol}}
 \end{figure}
 
 Mas como já mencionado o jogo vem trazendo mudanças mais frequentes e isso tem ``forçado" uma adaptação mais rápida de seus jogadores. O META, como essa adaptação é chamada, pode ser visto como um estilo que ao longo do tempo vem se mostrando mais efetivo que os outros e aproveita mais efetivamente os recursos disponíveis. Mas a pergunta que fica é ``como se adaptar de forma mais rápida ao META?".  Diante deste questionamento, este trabalho tenta trazer uma resposta. De forma simples o trabalho mostra uma análise baseada em estatísticas do jogo visando mostrar quais os personagens estão mais fortes, no \textit{patch} atual, ou quais personagens melhor se adaptam ao novo META.  
@@ -108,7 +109,7 @@ Esta seção apresenta os dados na sua forma original e descreve as etapas execu
 
 \subsection{Fontes dos dados}
 \label{sec:fontedados}
-Para a obtenção da base de dados utilizamos um projeto do GitHub chamado LOL.tools\footnote{em https://github.com/MarcusDEFGH/LOL.tools}. Este projeto utiliza o Scrapy\footnote{https://scrapy.org/}, biblioteca em Python, que coleta os dados de uma página web e gera um arquivo .\texttt{csv} com os dados capturados. O site de onde os dados são extraídos é o OP.GG. Como já mencionado esse site disponibiliza um histórico de todas as partidas do jogo e tal dado é divido por regiões, onde cada região representa os servidores implantados.
+Para a obtenção da base de dados utilizamos um projeto do GitHub chamado LOL.tools\footnote{em https://github.com/MarcusDEFGH/LOL.tools}. Este projeto utiliza o Scrapy\footnote{https://scrapy.org/}, biblioteca em Python, que coleta os dados de uma página web e gera um arquivo .\texttt{csv} com os dados capturados. O site de onde os dados são extraídos é o OP.GG. Como já mencionado esse site disponibiliza um histórico de todas as partidas do jogo e tal dado é divido por regiões, onde cada região representa os servidores implantados. O arquivo gerado está disponível pelo link https://raw.githubusercontent.com/RicardoLuna/LOL\_STATISTICS/master/patch811.csv.
 
 \subsection{Entendendo os Dados}
 \label{sec:entendendo}
@@ -199,9 +200,7 @@ A taxa de vitória de um personagem pode ser algo associado ao \textit{patch} at
 
 No jogo a equipe SKT T1 da Coreia do Sul já foi considerada a melhor do mundo, nessa região o nível dos jogadores do competitivo é realmente alto se comparado com outras regiões. O jogador Faker (Lee Sang-hyeok), que joga na rota do meio, já foi considerado por muitos anos o melhor jogador em sua posição. Esse jogador tem um alto nível e quando em uma de suas partidas, seja em competições ou em partidas solo, e quando mostra um bom desempenho com algum personagem do jogo outros jogadores do mundo tentam “copiar” seu estilo de jogo, que se mostrou extremamente eficaz, e assim surgem os METAS.
 
-
-Já que os dados apresentam um conjunto de combinações de times e o resultado da partida é possível aplicar algoritmos como KNN (\textit{K nearest neighboors}) \cite{fukunaga1975branch}. Sua ideia principal é a possibilidade de estimar uma classe de um novo dado baseado no conjunto de vizinhos obtidos a partir de uma análise na base de dados. Para se estimar qual o nível de similaridade com um determinando elemento é utilizada uma função. Como os dados da base são apenas nomes dos personagens o calculo é realizado utilizando quantos \textit{matchs} foram obtidos entre um time e toda a base dados. O resultado da partida, que pode ser vitória ou derrota, será obtido como a classe que foi associada a maioria dos vizinhos desse objeto avaliado. 
-
+\subsection{Taxa de Vitória}
 
 A Figura~\ref{fig:win_rate} mostra dois gráficos: a direita com as melhores taxas de vitórias; a esquerda com as piores taxas de vitórias. Os valores do gráficos foram gerados usando o comando \texttt{head} para os melhores e \texttt{tail} para os piores. As barras indicam a taxa de vitória e a legenda mostra quais os seus valores utilizando as cores como referência. Com os dados apresentados nessa figura é possível observar que os personagens Quinn, Pantheon, Poppy, Cassiopeia e Kog’Maw obtiveram os melhores \textit{rates}, de forma global, todos acima de 50\%. Enquanto, Jinx, Amumu, Volibear, Tristana, Xerath e Elise apresentam os piores resultados, estes abaixo de 50\%. 
 
@@ -211,66 +210,113 @@ A Figura~\ref{fig:win_rate} mostra dois gráficos: a direita com as melhores tax
 \caption{\label{fig:win_rate}Taxa de vitórias global}
 \end{figure}
 
-Os dados mostram que se um jogador for iniciar uma partida ou tentar melhorar com um novo personagem seria interessante observar jogos de um jogador mais experiente, facilmente encontrados em plataformas de \textit{streamming} como Youtube\footnote{https://www.youtube.com/} ou Twitch.tv\footnote{https://www.twitch.tv/}, e depois que entender a mecânica desse personagem inicia seus treinos. Usando uma estratégia assim o jogador pode atingir maiores taxa de vitória e usar o META e as estatística a seu favor.
+Os dados mostram que se um jogador for iniciar uma partida ou tentar melhorar com um novo personagem seria interessante observar jogos de um jogador mais experiente, facilmente encontrados em plataformas de \textit{streamming} como Youtube\footnote{https://www.youtube.com/} ou Twitch.tv\footnote{https://www.twitch.tv/}, e depois que entender a mecânica desse personagem inicia seus treinos. Usando uma estratégia assim o jogador pode atingir maiores taxa de vitória e usar o META e as estatísticas a seu favor.
 
+\begin{lstlisting}[language=R, caption={Calculo da taxa de vitória},label={cod:win_rate}]
+
+win_rate_final<-matrix(1:2*length(champ_names),length(champ_names),2)
+for (x in 1:tamanho){
+  champ_posicao<-which(grepl(champ_names[x],dados$team_1)) # Busca o time 1 que um persangem participou
+  champ_posicao2<-which(grepl(champ_names[x],dados$team_2)) # Busca o time 2 que um persangem participou
+  win_rate<-dados$result[champ_posicao] # Obtem o resultado do time 1
+  win_temp<-!dados$result[champ_posicao2] # Obtem o resultado do time 2 (invertido)
+  win_rate<-c(win_rate,win_temp) # Concatena os valores
+  valor<-mean(win_rate) # Calcula a taxa de vitoria
+  print(paste('Champion ', champ_names[x], ' possuiu uma win rate de ', valor, '!')) # Exibe o valor do resultado como o nome do personagem
+  win_rate_final[x,1]<-valor # Salva o valor na matriz
+  win_rate_final[x,2]<-champ_names[x] # Adiciona o nome do personagem na matriz
+}
+
+\end{lstlisting}
+
+O código \ref{cod:win_rate} mostra como é efetuado o cálculo para a taxa de vitória, é feito uma busca para obter quais os times o personagem participou, depois é obtido o resultado da partida e por fim é utilizada a função \texttt{mean} para calcular o resultado final.
+
+\begin{lstlisting}[language=R, caption={Código para gerar os gráfico dos dados},label={cod:win_rate_code}]
+par(mfrow=c(1,2))
+barplot(tail(data_champion$rate), 
+        names.arg=tail(data_champion$names), 
+        main="Higher win rate - Global",
+        ylim=c(0,max(tail(data_champion$rate))),
+        xlab="Champion",
+        ylab="Win rate",
+        col=colors)
+
+legend("bottomright", legend = paste(round(tail(data_champion$rate), digits = 4)*100, '%'),
+       col =colors, pch = 15)
+
+barplot(head(data_champion$rate), 
+        names.arg=head(data_champion$names), 
+        main="Lower win rate - Global",
+        ylim=c(0,max(head(data_champion$rate))),
+        xlab="Champion",
+        ylab="Win rate",
+        col=colors)
+legend("bottomright", legend = paste(round(head(data_champion$rate), digits = 4)*100, '%'),
+       col =colors, pch = 15)
+
+\end{lstlisting}
+
+
+Código \ref{cod:win_rate_code} mostra como os gráficos foram gerados, como a quantidade de dados é grande foi optado o uso apenas do dados provenientes da função \texttt{head} e \texttt{tail}. Na parte inferior de cada barra é encontrado o nome do personagem e na legenda da imagem é apresentada o valor em percentual da respectiva taxa de vitória do personagem.
 \subsection{Personagens Mais Populares}
-%Continuo de manha...
+
+No jogo como sabemos existem diferentes personagens com diferentes habilidades e dificuldades. Cabe ao jogador decidir durante uma partida qual personagem ele deseja. Essa escolha pode ter relação com o momento que o jogo se encontra, como exemplo, personagens ficaram mais fortes no \textit{patch} atual, novas mecânicas, ou até mesmo pelo fato de um personagem ter sido lançado recentemente. Diante disso, propomos um estilo de gráfico que representa os personagens mais e menos populares do jogo, isto é, quais personagens são mais e menos jogados.
+
+A Figura~\ref{fig:popular} ilustra bem essa proposta. Diante dos gráficos é possível ter uma ideia dos personagens do momento. O gráfico da esquerda representa os personagens (\textit{champions}) mais escolhidos, nele listamos os 6 mais escolhidos dentre todas as regiões. Interpretando esses dados, podemos afirmar que nesse \textit{patch}, o personagem mais jogado é Lucian, com mais de 5000 partidas de um total de mais de 12 mil na base dados. Seguido pelos personagens Ezreal, Yasuo, Camile, Graves e Kai'sa. Isso pode representar que esses personagens estão fortes no META. Já o gráfico da direita mostra os personagens menos jogados, o que pode indicar que estes estão fracos em relação aos demais ou até mesmo o nível de dificuldade elevado durante uma partida. No gráfico o personagem menos jogado é Amumu com aproximadamente 60 partidas, seguido por Shyvana, Azir, Nasus, Volibear e Yorick.
+
 \begin{figure}[ht]
 \centering
 \includegraphics[width=1\columnwidth]{imagens/less_most_popular}
 \caption{\label{fig:popular}Personagens mais e menos populares}
 \end{figure}
 
-\begin{lstlisting}[language=R, caption={Organizando dados com os nomes dos personagens},label={cod:mostpop}]
+Outro gráfico está ilustrado na Figura~\ref{fig:popular2}. Esse gráfico representa os campeões mais jogados por região, diferente do anterior que mostra a estatística global. Nele podemos notar que o campeão mais jogado é Lucian é o mais jogado em mais de uma região (\texttt{euw, na, br, las, eune}), o que confirma sua popularidade global em relação a Figura~\ref{fig:popular}. Além disso temos outros personagens: Zoe, Yasuo, Pyke e Taliah. Podemos notar que o personagem Yasuo em comparação com o resultado global é um dos mais jogador no servidor \texttt{br}, mas que no resultado geral é um dos menos jogados. Isso pode significar, que nessa região específica existam jogadores mais habilidosos com determinados campeões. Portanto, o cliente desses dados poderá usar um determinado personagem dependendo da região na qual o jogador está inserido.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.7\columnwidth]{imagens/region}
+\caption{\label{fig:popular2}Personagens mais populares por região (\textit{server})}
+\end{figure}
+
+Para gerar esses gráficos foi preciso um trabalho em cima da base de dados já organizada. O Código~\ref{cod:mostpop} mostra que para cada iteração ocorre sobre a lista de personagens (linhas 5 a 23), onde é obtido as posições onde há ocorrências do personagem \texttt{x} na base de dados \texttt{matches} através da função \texttt{grepl} aplicada à \texttt{which}. Isso ocorre para o time 1 e 2. Em seguida juntamos as bases \texttt{champ\_data\_team1} e \texttt{champ\_data\_team2} em um único conjunto de dados (\texttt{champ\_data}, linha 12) usando o comando \texttt{rbind}. Para agruparmos por região, aplicamos a função group\_by no conjunto de dados \texttt{champ\_data} na variável \texttt{server} (regiões). Em seguida é gerado um \textit{dataframe} com o cálculo da quantidade de partidas em cada região (linhas 16 a 22). O conjunto de dados \texttt{champ\_popularity} segue o padrão da Tabela~\ref{table:popregion}, onde para cada personagem há a quantidade de partidas (\textit{popularity}) em cada região (\textit{server}). Para gerar um conjunto dados com os personagens mais populares globalmente, utilizamos \texttt{group\_by} para agrupar os campeões (\texttt{champ}), em seguida é aplicado no \texttt{summarise} para gerar a quantidade (\texttt{count = sum(popularity.value)}) e ordenamos os dados com \texttt{arrange}. Para gerar os mais populares por região é similar, a diferença está no filtro aplicado ao \texttt{server} para ignorar elementos da região \texttt{www} (que representa um servidor de testes), e no agrupamento dos dados, pois utilizamos as variáveis \texttt{champ} e \texttt{populariy.server} (agrupando por personagem e servidor), assim aplicamos \texttt{summarise} para calcular o total (linhas 32 a 35).
+
+\begin{lstlisting}[language=R, caption={Gerando novos dados a partir de um conjunto maior},label={cod:mostpop}]
 # champiom's win rate by region
 rate_by_region <- c()
 regions <- unique(dados$server)
-tamanho = length(champ_names)
+tamanho = length(champions)
 for (x in 1:tamanho){
-  champ_pos_team1 <- which(grepl(champ_names[x],dados$team_1))
-  champ_pos_team2 <- which(grepl(champ_names[x],dados$team_2))
-  champ_data_team1 <- dados[champ_pos_team1, ]
-  champ_data_team2 <- dados[champ_pos_team2, ]
+  champ_pos_team1 <- which(grepl(champions[x],matches$team1))
+  champ_pos_team2 <- which(grepl(champions[x],matches$team2))
+  champ_data_team1 <- matches[champ_pos_team1, ]
+  champ_data_team2 <- matches[champ_pos_team2, ]
   champ_data_team2$result <- !champ_data_team2$result
   
   champ_data <- rbind(champ_data_team1, champ_data_team2)
   
   champ_popularity <- c()
+  
   for(y in 1:length(regions)){
     champ_popularity[y] <- sum(champ_data$server == regions[y])
   }
-  print(champ_names[x])
+
   champ_popularity <- data.frame(server = regions, value = champ_popularity)
-  print(champ_popularity) <- champ_data %>%
-                    group_by(server) %>%
-                    summarise(
-                      rate = mean(result)
-                    )
   
-  champ_popularity <- length(champ_data$server)
-  
-  rate_by_region <- rbind(rate_by_region, data.frame(champ=champ_names[x], champ_rate_by_region, popularity = champ_popularity))
+  rate_by_region <- rbind(rate_by_region, data.frame(champ=champions[x], champ_rate_by_region, popularity = champ_popularity))
 }
 
-# most popular champions in the world
+# gera os personagens mais populares global
 most_popular <- rate_by_region %>%
-  group_by(champ) %>%
-  summarise(count = max(popularity)) %>%
-  arrange(desc(count))
-  
-barplot(head(most_popular$count), 
-        names.arg=head(most_popular$champ), 
-        main="Most popular champions - Global",
-        xlab="Champion",
-        ylab="Matches",
-        col=colors)
+  group_by(champ) %>% # agrupa por personagem
+  summarise(count = sum(popularity.value)) %>% # calcula a popularidade
+  arrange(desc(count)) # ordena pela quantidade de partidas
 
-barplot(tail(most_popular$count), 
-        names.arg=tail(most_popular$champ), 
-        main="Less popular champions - Global",
-        xlab="Champion",
-        ylab="Matches",
-        col=colors)
+# gera os personagens mais populares por regiao
+most_popular_by_region <- rate_by_region %>%
+  filter(popularity.server != "www")  %>%  # filtra o dado ignorando o servidor www
+  group_by(champ, popularity.server) %>% # agrupa por personagem e regiao
+  summarise(count = sum(popularity.value)) %>% # calcula a popularidade
+  arrange(desc(count))
 \end{lstlisting}
 
 \begin{table}[ht]
@@ -287,12 +333,82 @@ barplot(tail(most_popular$count),
 5 & jp & 64 \\ \hline
 6 & tr & 23 \\ \hline
 \end{tabular}
+\label{table:popregion}
 \end{table}
 
+Para gerar os gráficos apresentados na Figura~\ref{fig:popular} aplicamos o comando \texttt{barplot} pegando os seis personagens mais populares (\texttt{head(most\_popular\$champ)}) e os menos populares (\texttt{tail(most\_popular\$champ)}). Para o gráfico da Figura~\ref{fig:popular2} obtivemos os dez primeiros elemento do conjunto de dados. Aplicamos legendas e outros elementos visuais em todos eles, como está exposto no código. 
+
+\begin{lstlisting}[language=R, caption={Gerando gráficos para mostrar visualmente a popularidade dos personagens},label={cod:mostpop}]
+# coloca os graficos um ao lado do outro
+par(mfrow=c(1,2))
+# gera o grafico 1
+barplot(head(most_popular$count), 
+        names.arg=head(most_popular$champ), 
+        main="Most popular champions - Global",
+        xlab="Champion",
+        ylab="Matches",
+        col=colors)
+legend("bottomright", legend = head(most_popular$champ),
+       col =colors, pch = 15)
+# gera o grafico 2
+barplot(tail(most_popular$count), 
+        names.arg=tail(most_popular$champ), 
+        main="Less popular champions - Global",
+        xlab="Champion",
+        ylab="Matches",
+        col=colors)
+legend("bottomright", legend = tail(most_popular$champ),
+       col =colors, pch = 15)
+# gera o grafico dos personagens populares por regiao
+barplot(most_popular_by_region$count[1:10], 
+        names.arg=most_popular_by_region$champ[1:10], 
+        main="Most popular champions per region",
+        xlab="Champion",
+        ylab="Matches",
+        col=colors)
+legend("bottomright", legend = most_popular_by_region$popularity.server[1:10],
+       col =colors, pch = 15)
+\end{lstlisting}
+
+
+
+\subsection{Utilizando o KNN para previsão}
+
+Já que os dados apresentam um conjunto de combinações de times e o resultado da partida é possível aplicar algoritmos como KNN (\textit{K nearest neighboors}) \cite{fukunaga1975branch}. Sua ideia principal é a possibilidade de estimar uma classe de um novo dado baseado no conjunto de vizinhos obtidos a partir de uma análise na base de dados. Para se estimar qual o nível de similaridade com um determinando elemento é utilizada uma função. Como os dados da base são apenas nomes dos personagens o cálculo é realizado utilizando quantos \textit{matches}, \texttt{str\_count} que conta a quantidade de ocorrências de \texttt{string} e um vetor , foram obtidos entre um time e toda a base dados. O resultado da partida, que pode ser vitória ou derrota, será obtido como a classe que foi associada a maioria dos vizinhos desse objeto avaliado. 
+
+\begin{lstlisting}[language=R, caption={Código para calcular a similaridade de um elemento com a base de dados},label={cod:knn}]
+df_knn<-data.frame(dist_team=rep(0,tamanho_base*2), classe = rep(0, tamanho_base*2))
+for (x in 1:tamanho_base){
+  df_knn$dist_team[x]<-sum(str_count(matches$team1[x], team)) # Utiliza sim para contar a quantidade de matchs
+  df_knn$classe[x]<-matches$result[x] # Salva o resultado
+  df_knn$dist_team[x+tamanho_base]<-sum(str_count(matches$team2[x], team)) # faz a contagem para o time 2
+  df_knn$classe[x+tamanho_base]<-!matches$result[x] # inverte o resultado
+}
+df_knn<-df_knn[order(df_knn$dist_team, decreasing=TRUE),] # Ordena o vetor para obter os mais proximos
+
+df_final<-df_knn[1:k,] # Obtem os k elementos mais proximos
+
+if(length(df_final$classe[df_final$classe == 1]) > length(df_final$classe[df_final$classe == 0])){
+  print("O time tem mais chances de vencer!")
+}else if (length(df_final$classe[df_final$classe == 1]) < length(df_final$classe[df_final$classe == 0])){
+  print("O time tem mais chances de perder!")
+}else{
+  print("O time tem as mesmas chances de vitoria e derrota!")
+}
+\end{lstlisting}
+
+
+O código \ref{cod:knn} mostra como foi a implementação, a base de dados utiliza o mesmo pré-processamento utilizado para calcular as taxas de vitória, depois é calculada a distância para cada elemento utilizando a função  \texttt{str\_count} do pacote \texttt{stringr} que fornece a quantidade de \texttt{matches} (partidas). Como a base de dados, tanto do time 1 como do time 2, foi unida como uma única \texttt{string} que constitui o time inteiro, a função usada pode obter a quantidade de elementos que estão contidos no vetor, novo time avaliado, que se deseja comparar. Posteriormente é a verificação que tem como resultado se o time tem mais chances de vitória ou derreto e no caso para um k com valores pares a chance pode ser igual.
+Utilizando o time com os personagens Graves, Ornn, Annie, Gragas, Alistar com o valor de $k=3$, o resultado obtido é "O time tem mais chances de perder!" os 5 elementos com maior proximidade apresentam uma quantidade de \texttt{matchs} sendo 3, que indica que 3 elementos desse tipo são similares a outros 3 elementos que constituem os times da base de dados. 
 \section{Conclusões}
-%faço de manhã
 
+Neste trabalho aplicamos diferentes estatísticas em uma base de dados de partidas do jogo \textit{League of Legends}. A base de dados apresenta milhares de partidas que para o usuário não é possível entender e identificar \textit{insights}. Aplicamos técnicas e abordagens para tratar esses dados para que assim seja possível o usuário ver resultado de uma forma legível e de fácil interpretação.
 
+Como a base de dados apresentavam informações sobre as partidas dos times e os respectivos personagens dos times para regiões específicas, propomos algumas estatísticas relacionadas aos próprios personagens. No caso, propomos estatísticas dos campeões com maiores taxas de vitória, os campeões mais populares e com isso pudemos prever possíveis resultados lavando em consideração um time fornecido pelo usuário, através do algoritmo k-NN. Portanto, gerando um indicativo por meio gráficos auxiliadores e informações em texto para quem está consultado essas informações antes de montar um time.
+
+Um das limitações dessa proposta, é que os dados não são atualizados em tempo real, o que pode implicar em dados que não reflete à realidade, visto que o jogo está constantemente sofrendo atualizações e novas funcionalidades são disponibilizadas a cada \textit{patch}. Por isso seria importante, uma metodologia que utilizasse dados sempre atualizados e que levasse em consideração novas características do jogo, até mesmo com testes de hipóteses e outros meios estatísticos.
+
+\renewcommand{\refname}{Referências}
 \bibliographystyle{alpha}
 \bibliography{sample}
 
